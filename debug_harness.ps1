@@ -16,6 +16,7 @@ function PipeWithLabel {
 
         'info: "{0}"' -f @( $MaybeLabel )
         | New-Text -fg 'gray40' -bg 'gray15'
+        | Join-String -op (Hr 1)
         | Write-Information
 
         #$one | iot2
@@ -28,6 +29,13 @@ function PipeWithLabel {
 
 }
 
+# $AstSample = { $employee, $dates | PipeWithLabel -Infa 'Continue' }.Ast
+# $AstStr = $AstSample.EndBlock.Extent.Text
+
+# Nasty.Find.SingleParent -ScriptContents $AstStr
+# | Should -BeIn 'employee', 'dates'
+
+throw 'don''t forget to memove this throw'
 $Sample = @'
 $employee | PipeWithLabel -Infa 'Continue'
 '@
@@ -47,3 +55,26 @@ $even | nameIt | CountOf
 $odd | nameIt | CountOf
 # Hr
 $odd | nameIt | CountOf
+
+0..4 | join.Md.TableRow | NameIt
+
+$x = 0..4; $y = 'a'..'e'
+@($x; $y ) | NameIt | join.Md.TableRow
+Hr
+
+@'
+examples:
+
+    $x = 0..4; $y = 'a'..'e';
+    @($x; $y ) | NameIt | join.Md.TableRow
+
+    ---------------------------------------------
+    info: ""
+    | ␀ | 1 | 2 | 3 | 4 |
+
+    ---------------------------------------------
+    info: "y"
+    | ␀ | 1 | 2 | 3 | 4 | a | b | c | d | e |
+
+'@
+
